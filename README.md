@@ -14,7 +14,6 @@
 
 ```bash
 brew install ffmpeg
-pip install openai-whisper python-dotenv
 ```
 
 2. 環境変数の設定:
