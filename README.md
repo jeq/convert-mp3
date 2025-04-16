@@ -1,131 +1,86 @@
-# 音声ファイル変換・文字起こしツール
+# 音声ファイル変換ツール
 
-このツールは、Mac のダウンロードフォルダ内の音声ファイル（.m4a, .wav）を MP3 形式に変換します。オプションで文字起こしも実行できます。
+このツールは、Mac のダウンロードフォルダ内の音声ファイル（.m4a, .wav）を MP3 形式に変換します。
 
 ## 必要条件
 
+- macOS
 - Python 3.6 以上
 - ffmpeg
-- OpenAI API キー（文字起こし機能を使用する場合）
 
 ## インストール方法
 
-1. 必要なパッケージのインストール:
+1. Homebrew のインストール（まだインストールしていない場合）:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+インストール後、Homebrew が PATH に追加されていない場合は、以下のコマンドを `.bash_profile` または `.zshrc` に追加します:
+
+```bash
+# Homebrew の環境変数設定
+eval "$(/opt/homebrew/bin/brew shellenv)"  # Apple Silicon Mac の場合
+# または
+eval "$(/usr/local/bin/brew shellenv)"     # Intel Mac の場合
+```
+
+2. ffmpeg のインストール:
 
 ```bash
 brew install ffmpeg
-pip install openai-whisper python-dotenv
-```
-
-2. 環境変数の設定:
-
-- `.env`ファイルを作成し、以下の内容を設定してください：
-
-```
-OPENAI_API_KEY=your_api_key_here
-WHISPER_MODEL=base
 ```
 
 3. スクリプトの実行権限を付与:
 
 ```bash
-chmod +x convert_audio.py
+chmod +x ~/Documents/convert-mp3-main/convert_audio.py
+```
+
+4. エイリアスの設定:
+
+以下を`~/.bash_profile`または`~/.zshrc`に追加します（macOS のバージョンによって異なります）:
+
+```bash
+alias mp3='~/Documents/convert-mp3-main/convert_audio.py'
+```
+
+設定を反映するために、以下のコマンドを実行するか、ターミナルを再起動します:
+
+```bash
+source ~/.bash_profile  # または source ~/.zshrc
 ```
 
 ## 使用方法
 
-### 基本的な使い方（変換のみ）
+### 基本的な使い方
 
 1. 変換したい音声ファイル（.m4a, .wav）をダウンロードフォルダに配置します。
 2. 以下のコマンドを実行します：
 
 ```bash
-./convert_audio.py
+mp3
 ```
 
 ### コマンドオプション
 
-1. 変換と文字起こしを実行:
+既存の MP3 ファイルも含めて最小サイズに変換:
 
 ```bash
-./convert_audio.py --transcribe
+mp3 --reconvert-mp3
 ```
-
-2. 既存の MP3 ファイルも含めて最小サイズに変換:
-
-```bash
-./convert_audio.py --reconvert-mp3
-```
-
-3. 特定の Whisper モデルを使用して文字起こし:
-
-```bash
-./convert_audio.py --transcribe --model large
-```
-
-### 利用可能な Whisper モデル
-
-- `base`: 最も軽量で高速（デフォルト）
-
-  - 処理時間: 約 1-2 分/10 分の音声
-  - メモリ使用量: 約 1GB
-  - 精度: 基本的な文字起こしに適している
-
-- `small`: より正確な結果
-
-  - 処理時間: 約 2-3 分/10 分の音声
-  - メモリ使用量: 約 2GB
-  - 精度: 一般的な用途に最適
-
-- `medium`: さらに精度が向上
-
-  - 処理時間: 約 4-6 分/10 分の音声
-  - メモリ使用量: 約 4GB
-  - 精度: より正確な文字起こしが必要な場合
-
-- `large`: 最も正確な結果
-
-  - 処理時間: 約 8-12 分/10 分の音声
-  - メモリ使用量: 約 8GB
-  - 精度: 最高レベルの精度が必要な場合
 
 ## 進捗状況の表示
 
 処理中は以下のような進捗状況が表示されます：
 
-1. ファイル処理開始時:
-
-```
-処理開始: example.m4a
-```
-
-2. 変換時:
+1. 変換時:
 
 ```
 変換成功: example.mp3
 元のサイズ: 10.50MB
 変換後サイズ: 1.25MB
 圧縮率: 88.1%
-```
-
-3. 文字起こし開始時（--transcribe オプション使用時）:
-
-```
-文字起こしを開始します...
-Whisperモデル 'base' を読み込んでいます...
-```
-
-4. 処理中:
-
-```
-音声ファイルを処理中...
-```
-
-5. 保存時:
-
-```
-結果を保存中...
-文字起こし結果を保存しました: /Users/username/Downloads/transcriptions/example.json
 ```
 
 ## 機能
@@ -136,18 +91,12 @@ Whisperモデル 'base' を読み込んでいます...
   - サンプリングレート: 22.05kHz
   - チャンネル: モノラル
   - 品質設定: 最小サイズ
-- オプションで Whisper を使用した文字起こし
-- 文字起こし結果の JSON 形式での保存
-- 構造化された形式での結果表示
 
 ## 出力
 
 - 変換された MP3 ファイルは元のファイルと同じ場所に保存
   - 変換前後のファイルサイズと圧縮率を表示
   - ファイルサイズを最小限に抑える設定を使用
-- 文字起こし結果は`~/Downloads/transcriptions/`ディレクトリに JSON 形式で保存
-  - ファイル名は元の音声ファイルの名前と同じ（拡張子が.json に変更）
-- コンソールに文字起こし結果が表示
 
 ## 注意事項
 
@@ -155,6 +104,3 @@ Whisperモデル 'base' を読み込んでいます...
 - 変換された MP3 ファイルは元のファイルと同じ名前で、拡張子が.mp3 になります
 - 既に MP3 ファイルが存在する場合は上書きされます
 - `--reconvert-mp3`オプションを使用すると、既存の MP3 ファイルも最小サイズに変換されます
-- 文字起こしには時間がかかる場合があります
-- OpenAI API の利用には課金が発生する場合があります
-- FP16 の警告メッセージは無視して問題ありません（CPU での実行時は自動的に FP32 に切り替わります）
