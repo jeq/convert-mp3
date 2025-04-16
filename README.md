@@ -32,19 +32,20 @@ source ~/.zshrc
 brew install ffmpeg
 ```
 
-### 4. 変換ツールのダウンロード
+### 4. 変換ツールの準備
+
+1. GitHub から[ZIP ファイルをダウンロード](https://github.com/jeq/convert-mp3/archive/refs/heads/main.zip)します
+2. ダウンロードした ZIP ファイルを解凍し、`convert-mp3-main`フォルダを書類フォルダ（Documents）に移動します
+3. ターミナルで以下のコマンドを実行して、スクリプトに実行権限を付与します：
 
 ```bash
-cd ~/Documents
-git clone https://github.com/jeq/convert-mp3.git
-cd convert-mp3
-chmod +x convert_audio.py
+chmod +x ~/Documents/convert-mp3-main/convert_audio.py
 ```
 
 ### 5. エイリアスの設定
 
 ```bash
-echo 'alias mp3="~/Documents/convert-mp3/convert_audio.py"' >> ~/.zshrc
+echo 'alias mp3="~/Documents/convert-mp3-main/convert_audio.py"' >> ~/.zshrc
 source ~/.zshrc
 ```
 
