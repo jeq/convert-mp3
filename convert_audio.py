@@ -61,9 +61,9 @@ def main():
     
     # 対応する音声ファイルの拡張子
     if args.reconvert_mp3:
-        audio_extensions = ('.m4a', '.wav', '.mp3')
+        audio_extensions = ('.m4a', '.wav', '.mp3', '.webm')
     else:
-        audio_extensions = ('.m4a', '.wav')
+        audio_extensions = ('.m4a', '.wav', '.webm')
     
     # ダウンロードフォルダ内の音声ファイルを検索
     for file in os.listdir(downloads_dir):
